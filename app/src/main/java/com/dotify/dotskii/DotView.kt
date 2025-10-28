@@ -5,23 +5,16 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.view.View
 
-class DotView(context: Context) : View(context) {
+class DotView(context: Context, private val radius: Float, private val color: Int) : View(context) {
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var radius = 10f
-
-    fun setColor(r: Int, g: Int, b: Int) {
-        paint.color = android.graphics.Color.rgb(r, g, b)
-        invalidate()
-    }
-
-    fun setSize(sizePx: Int) {
-        radius = sizePx / 2f
-        invalidate()
+    private val paint = Paint().apply {
+        isAntiAlias = true
+        this.color = color
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        // Draw dot at the center of the screen
         canvas.drawCircle(width / 2f, height / 2f, radius, paint)
     }
 }
