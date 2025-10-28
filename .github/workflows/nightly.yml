@@ -1,11 +1,11 @@
-name: make nightly (Dotskii)
+name: make nightly
 
 permissions:
   contents: write
 
 on:
   schedule:
-    - cron: '45 18 * * *'  # runs daily at 2:45 AM PH time (UTC+8)
+    - cron: '45 18 * * *'
   workflow_dispatch:
 
 jobs:
@@ -21,15 +21,15 @@ jobs:
       - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: 'adopt'
           java-version: 17
           cache: 'gradle'
 
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+      - name: Build arm64-v8a APK
+        run: gradle assembleDebug -PabiFilters=arm64-v8a
 
       - name: Install apksigner
         run: |
@@ -43,38 +43,38 @@ jobs:
             -storepass test1234 \
             -alias dummykey \
             -keypass test1234 \
-            -dname "CN=Dotskii, OU=Dotskii, O=Dotskii, L=SG, S=SG, C=PH" \
+            -dname "CN=Test, OU=Test, O=Test, L=Test, S=Test, C=PH" \
             -keyalg RSA \
             -keysize 2048 \
             -validity 10000
 
-      - name: Sign APK
+      - name: Sign APK with apksigner
         run: |
           apksigner sign \
             --ks dummy.keystore \
             --ks-key-alias dummykey \
             --ks-pass pass:test1234 \
             --key-pass pass:test1234 \
-            --out Dotskii-signed.apk \
-            app/build/outputs/apk/debug/app-debug.apk
+            --out DotSkii-arm64-v8a.apk \
+            app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
 
       - name: Verify APK signature
-        run: apksigner verify Dotskii-signed.apk
+        run: apksigner verify DotSkii-arm64-v8a.apk
 
-      - name: Get current date time (PH timezone)
+      - name: Get current date time in PH time
         id: datetime
         run: |
           PH_TIME=$(TZ='Asia/Manila' date +'%Y%m%d_%I%M%p')
           echo "filename_time=$PH_TIME" >> $GITHUB_OUTPUT
 
-      - name: Create zip with APK
+      - name: Create zip file with APK
         run: |
-          mv Dotskii-signed.apk "Dotskii_${{ steps.datetime.outputs.filename_time }}.apk"
-          zip "Dotskii_build_${{ steps.datetime.outputs.filename_time }}.zip" \
-            "Dotskii_${{ steps.datetime.outputs.filename_time }}.apk"
+          mv DotSkii-arm64-v8a.apk "DotSkii_${{ steps.datetime.outputs.filename_time }}.apk"
+          zip "DotSkii_build_${{ steps.datetime.outputs.filename_time }}.zip" \
+            "DotSkii_${{ steps.datetime.outputs.filename_time }}.apk"
 
-      - name: Upload build artifact
+      - name: Upload zip artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Dotskii-build-${{ steps.datetime.outputs.filename_time }}
-          path: ./Dotskii_build_${{ steps.datetime.outputs.filename_time }}.zip
+          path: ./DotSkii_build_${{ steps.datetime.outputs.filename_time }}.zip
+          name: DotSkii-build-${{ steps.datetime.outputs.filename_time }}
