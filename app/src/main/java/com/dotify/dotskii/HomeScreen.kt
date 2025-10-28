@@ -42,11 +42,12 @@ class HomeScreen : AppCompatActivity() {
                 if (!isRunning) {
                     startService(Intent(this, DotOverlayService::class.java))
                     toggleButton.text = "Stop"
+                    isRunning = true
                 } else {
                     stopService(Intent(this, DotOverlayService::class.java))
                     toggleButton.text = "Start"
+                    isRunning = false
                 }
-                isRunning = !isRunning
             } else {
                 val intent = Intent(
                     Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
@@ -79,5 +80,12 @@ class HomeScreen : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Check if service is running and update button state
+        isRunning = DotOverlayService.isRunning
+        toggleButton.text = if (isRunning) "Stop" else "Start"
     }
 }
