@@ -37,8 +37,8 @@ jobs:
           mkdir -p app/src/main/res/mipmap-anydpi-v26
           convert -size 48x48 xc:green app/src/main/res/mipmap-anydpi-v26/ic_launcher.png
 
-      - name: Build arm64-v8a APK
-        run: gradle assembleDebug -PabiFilters=arm64-v8a
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
 
       - name: Install apksigner
         run: |
@@ -64,11 +64,11 @@ jobs:
             --ks-key-alias dummykey \
             --ks-pass pass:test1234 \
             --key-pass pass:test1234 \
-            --out DotSkii-arm64-v8a.apk \
-            app/build/outputs/apk/debug/app-arm64-v8a-debug.apk
+            --out DotSkii-debug.apk \
+            app/build/outputs/apk/debug/app-debug.apk
 
       - name: Verify APK signature
-        run: apksigner verify DotSkii-arm64-v8a.apk
+        run: apksigner verify DotSkii-debug.apk
 
       - name: Get current date time in PH time
         id: datetime
@@ -78,7 +78,7 @@ jobs:
 
       - name: Create zip file with APK
         run: |
-          mv DotSkii-arm64-v8a.apk "DotSkii_${{ steps.datetime.outputs.filename_time }}.apk"
+          mv DotSkii-debug.apk "DotSkii_${{ steps.datetime.outputs.filename_time }}.apk"
           zip "DotSkii_build_${{ steps.datetime.outputs.filename_time }}.zip" \
             "DotSkii_${{ steps.datetime.outputs.filename_time }}.apk"
 
