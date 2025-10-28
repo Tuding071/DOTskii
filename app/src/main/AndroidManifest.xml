@@ -1,26 +1,23 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dotify.dotskii">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Permission to draw overlay -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
+        android:allowBackup="true"
         android:label="DotSkii"
         android:icon="@mipmap/ic_launcher"
-        android:exported="true">
+        android:supportsRtl="true"
+        android:theme="@style/Theme.DotSkii">
 
-        <!-- Main launcher activity -->
         <activity
             android:name=".HomeScreen"
-            android:exported="true"
-            android:theme="@style/Theme.DotSkii">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Dot overlay service -->
         <service
             android:name=".DotOverlayService"
             android:exported="false" />
