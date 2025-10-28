@@ -39,12 +39,11 @@ class HomeScreen : AppCompatActivity() {
 
         toggleButton.setOnClickListener {
             if (Settings.canDrawOverlays(this)) {
-                val intent = Intent(this, DotOverlayService::class.java)
                 if (!isRunning) {
-                    startService(intent)
+                    startService(Intent(this, DotOverlayService::class.java))
                     toggleButton.text = "Stop"
                 } else {
-                    stopService(intent)
+                    stopService(Intent(this, DotOverlayService::class.java))
                     toggleButton.text = "Start"
                 }
                 isRunning = !isRunning
@@ -58,12 +57,27 @@ class HomeScreen : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
+            val rVal = rInput.text.toString().toIntOrNull() ?: 0
+            val gVal = gInput.text.toString().toIntOrNull() ?: 255
+            val bVal = bInput.text.toString().toIntOrNull() ?: 255
+            val sizeVal = sizeInput.text.toString().toIntOrNull() ?: 10
+
             val prefsEditor = getSharedPreferences("dotskii_prefs", MODE_PRIVATE).edit()
-            prefsEditor.putInt("r", rInput.text.toString().toIntOrNull() ?: 0)
-            prefsEditor.putInt("g", gInput.text.toString().toIntOrNull() ?: 255)
-            prefsEditor.putInt("b", bInput.text.toString().toIntOrNull() ?: 255)
-            prefsEditor.putInt("size", sizeInput.text.toString().toIntOrNull() ?: 10)
+            prefsEditor.putInt("r", rVal)
+            prefsEditor.putInt("g", gVal)
+            prefsEditor.putInt("b", bVal)
+            prefsEditor.putInt("size", sizeVal)
             prefsEditor.apply()
+
+            // Update overlay immediately if running
+            if (isRunning) {
+                val color = (0xFF shl 24) or (rVal shl 16) or (gVal shl 8) or bVal
+                Intent(this, DotOverlayService::class.java).also { intent ->
+                    intent.putExtra("updateColor", color)
+                    intent.putExtra("updateSize", sizeVal)
+                    startService(intent)
+                }
+            }
         }
     }
 }
