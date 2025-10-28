@@ -30,6 +30,13 @@ jobs:
         with:
           gradle-version: 8.7
 
+      - name: Create dummy green launcher icon
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+          mkdir -p app/src/main/res/mipmap-anydpi-v26
+          convert -size 48x48 xc:green app/src/main/res/mipmap-anydpi-v26/ic_launcher.png
+
       - name: Build arm64-v8a APK
         run: gradle assembleDebug -PabiFilters=arm64-v8a
 
