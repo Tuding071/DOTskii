@@ -30,30 +30,40 @@ class HomeScreen : AppCompatActivity() {
         toggleButton = findViewById(R.id.toggleButton)
         saveButton = findViewById(R.id.saveButton)
 
+        // Load saved values
+        val prefs = getSharedPreferences("dotskii_prefs", MODE_PRIVATE)
+        rInput.setText(prefs.getInt("r", 0).toString())
+        gInput.setText(prefs.getInt("g", 255).toString())
+        bInput.setText(prefs.getInt("b", 255).toString())
+        sizeInput.setText(prefs.getInt("size", 10).toString())
+
         toggleButton.setOnClickListener {
             if (Settings.canDrawOverlays(this)) {
+                val intent = Intent(this, DotOverlayService::class.java)
                 if (!isRunning) {
-                    startService(Intent(this, DotOverlayService::class.java))
+                    startService(intent)
                     toggleButton.text = "Stop"
                 } else {
-                    stopService(Intent(this, DotOverlayService::class.java))
+                    stopService(intent)
                     toggleButton.text = "Start"
                 }
                 isRunning = !isRunning
             } else {
-                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
-                    Uri.parse("package:$packageName"))
+                val intent = Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:$packageName")
+                )
                 startActivity(intent)
             }
         }
 
         saveButton.setOnClickListener {
-            val prefs = getSharedPreferences("dotskii_prefs", MODE_PRIVATE).edit()
-            prefs.putInt("r", rInput.text.toString().toIntOrNull() ?: 0)
-            prefs.putInt("g", gInput.text.toString().toIntOrNull() ?: 255)
-            prefs.putInt("b", bInput.text.toString().toIntOrNull() ?: 255)
-            prefs.putInt("size", sizeInput.text.toString().toIntOrNull() ?: 10)
-            prefs.apply()
+            val prefsEditor = getSharedPreferences("dotskii_prefs", MODE_PRIVATE).edit()
+            prefsEditor.putInt("r", rInput.text.toString().toIntOrNull() ?: 0)
+            prefsEditor.putInt("g", gInput.text.toString().toIntOrNull() ?: 255)
+            prefsEditor.putInt("b", bInput.text.toString().toIntOrNull() ?: 255)
+            prefsEditor.putInt("size", sizeInput.text.toString().toIntOrNull() ?: 10)
+            prefsEditor.apply()
         }
     }
 }
