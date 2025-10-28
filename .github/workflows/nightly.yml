@@ -38,7 +38,7 @@ jobs:
           convert -size 48x48 xc:green app/src/main/res/mipmap-anydpi-v26/ic_launcher.png
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug
+        run: gradle assembleDebug
 
       - name: Install apksigner
         run: |
