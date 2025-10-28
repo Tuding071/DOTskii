@@ -1,15 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="20dp"
-    android:gravity="center"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:gravity="center_horizontal"
+    android:background="#FFFFFF">
 
-    <EditText android:id="@+id/rInput" android:hint="R (0-255)" android:inputType="number" />
-    <EditText android:id="@+id/gInput" android:hint="G (0-255)" android:inputType="number" />
-    <EditText android:id="@+id/bInput" android:hint="B (0-255)" android:inputType="number" />
-    <EditText android:id="@+id/sizeInput" android:hint="Size (px)" android:inputType="number" />
+    <EditText
+        android:id="@+id/rInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="R (0–255)"
+        android:inputType="number" />
 
-    <Button android:id="@+id/saveButton" android:text="Save" />
-    <Button android:id="@+id/toggleButton" android:text="Start" />
+    <EditText
+        android:id="@+id/gInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="G (0–255)"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/bInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="B (0–255)"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/sizeInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Size (e.g. 10)"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/toggleButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:layout_marginTop="20dp" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        android:layout_marginTop="10dp" />
+
 </LinearLayout>
