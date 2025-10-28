@@ -1,0 +1,15 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText android:id="@+id/rInput" android:hint="R (0-255)" android:inputType="number" />
+    <EditText android:id="@+id/gInput" android:hint="G (0-255)" android:inputType="number" />
+    <EditText android:id="@+id/bInput" android:hint="B (0-255)" android:inputType="number" />
+    <EditText android:id="@+id/sizeInput" android:hint="Size (px)" android:inputType="number" />
+
+    <Button android:id="@+id/saveButton" android:text="Save" />
+    <Button android:id="@+id/toggleButton" android:text="Start" />
+</LinearLayout>
